@@ -198,11 +198,13 @@ class Torus:
         with open(file, 'w') as outfile:
             json.dump(response, outfile)
 
+torus = Torus(2)
+torus.print_cayley()
 
 
 
-torus2 = Torus(3)
-torus2.print_to_file("data/t3.json")
+# torus2 = Torus(3)
+# torus2.print_to_file("data/t3.json")
 
-torus3 = Torus(4)
-torus3.print_to_file("data/t4.json")
+# torus3 = Torus(4)
+# torus3.print_to_file("data/t4.json")

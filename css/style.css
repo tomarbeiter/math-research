@@ -53,6 +53,28 @@ h1 {
     height: 30em;
     margin: 0 auto;
 }
+.metaCard {
+    width: 15em;
+    height: 7em;
+    margin: 0 auto;
+    border-radius: .75em;
+    text-align: center;
+    padding-top: 1em;
+}
+.metaCardDiv {
+    padding-top: 2em;
+    padding-bottom: 2em;
+}
+
+.cardTitle {
+    color: steelblue;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-weight: bold;
+    font-size: large;
+    text-align: center;
+    padding-top: 1em;
+    padding-bottom: 1em;
+}
 
 .card-table {
     height: 30em; 
@@ -60,3 +82,4 @@ h1 {
     overflow-y: scroll;
     width: 60em;
   }
+  
