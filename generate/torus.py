@@ -16,6 +16,7 @@ class Torus:
             "re_all": [],
             "stickless_reflections": []
         }
+         
         self.base_labels = []
         self.labels_dict = {
             "1": "A",
@@ -30,12 +31,14 @@ class Torus:
             "10": "J"
         }
         self.composed_matrices = []
-        
+        self.composed_labels = []
         # Generate base matrices
         self._stick_rotations()
         self._stick_reflections()
         self._re_all()
         self._stickless_reflections()
+        # Compress base matrices dict into flat list
+        self.base_matrices_list = [item for sublist in list(self.base_matrices.values()) for item in sublist]
         self._compose()
         # Build Cayley Table once we know how big it is
         self.cayley_table = [[0 for _ in range(len(self.composed_matrices))] for _ in range(len(self.composed_matrices))]
@@ -164,10 +167,16 @@ class Torus:
         self.total += len(self.base_matrices["stickless_reflections"])
 
     def _compose(self):
+        # Global index for syncing labels with compositions
+        idx = 0
         for matrix in self.base_matrices["stick_rotations"]:
             self.composed_matrices.append(matrix)
+            self.composed_labels.append(self.base_labels[idx])
+            idx += 1
         for matrix in self.base_matrices["stick_reflections"]:
             self.composed_matrices.append(matrix)
+            self.composed_labels.append(self.base_labels[idx])
+            idx += 1
         # First half
         for i in range(1, self.n + 1):
             # Get all r1 combos
@@ -176,13 +185,20 @@ class Torus:
             for combo in combos:
                 for j in range(self.n * 2):
                     result = self.composed_matrices[j]
+                    label = self.composed_labels[j]
                     # Iterate in reverse over the combo
                     for k in range(len(combo) - 1, -1, -1):
                         result = np.matmul(combo[k], result)
+                        # Build the label
+                        for z in range(len(self.base_matrices_list)):
+                            if np.array_equal(combo[k], self.base_matrices_list[z]):
+                                label = self.base_labels[z] + "</br>" + label
                     self.composed_matrices.append(result)
+                    self.composed_labels.append(label)
         # Second half
         for i in range(self.n * 2):
             self.composed_matrices.append(np.matmul(self.composed_matrices[i], self.base_matrices["re_all"][0]))
+            self.composed_labels.append("re-all</br>" + self.base_labels[i])
         for i in range(1, self.n + 1):
             # Get all r1 combos
             combos = list(it.combinations(self.base_matrices["stickless_reflections"], i))
@@ -191,11 +207,19 @@ class Torus:
                 for j in range(self.n * 2):
                     # only difference is we stack re-z on all the combos from the first half
                     result = self.composed_matrices[j]
+                    label = self.composed_labels[j]
                     # Iterate in reverse over the combo
                     for k in range(len(combo) - 1, -1, -1):
                         result = np.matmul(combo[k], result)
+                        # Build the label
+                        for z in range(len(self.base_matrices_list)):
+                            if np.array_equal(combo[k], self.base_matrices_list[z]):
+                                label = self.base_labels[z] + "</br>" + label
                     result = np.matmul(self.base_matrices["re_all"][0], result)
+                    label = self.base_labels[self.n * 2] + "</br>" + label
                     self.composed_matrices.append(result)
+                    self.composed_labels.append(label)
+
 
     def _cayley(self):
         """Generate Cayley Table using indices of matrices."""
@@ -232,13 +256,12 @@ class Torus:
         with open(file, 'w') as outfile:
             json.dump(response, outfile)
 
-torus = Torus(6)
-torus.print_cayley()
+torus = Torus(3)
+torus.print_to_file("data/t3.json")
 
 
+torus3 = Torus(4)
+torus3.print_to_file("data/t4.json")
 
-# torus2 = Torus(3)
-# torus2.print_to_file("data/t3.json")
-
-# torus3 = Torus(4)
-# torus3.print_to_file("data/t4.json")
+torus4 = Torus(5)
+torus4.print_to_file("data/t5.json")
