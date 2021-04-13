@@ -1,0 +1,62 @@
+h1 {
+    color: steelblue;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-weight: bold;
+}
+
+.header {
+    text-align: center;
+    position: relative;
+    margin-top: 2%;
+}
+
+.text-pos {
+    text-align: center;
+    position: relative;
+    margin-top: 1%;
+}
+
+.input {
+    width: 20%;
+    margin: 0 auto;
+}
+
+.btninput {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.button {
+    background-color: steelblue;
+    border-color: steelblue;
+
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-weight: bold;
+}
+
+.button:hover {
+    background-color: slategray;
+    border-color: slategray;
+}
+
+.btn:focus {
+    outline: none;
+    box-shadow: none;
+    background-color: steelblue;
+    border-color: steelblue;
+  }
+
+.card {
+    width: 60em;
+    height: 30em;
+    margin: 0 auto;
+}
+
+.card-table {
+    height: 30em; 
+    overflow-x: scroll; 
+    overflow-y: scroll;
+    width: 60em;
+  }
