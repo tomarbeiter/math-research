@@ -16,6 +16,19 @@ class Torus:
             "re_all": [],
             "stickless_reflections": []
         }
+        self.base_labels = []
+        self.labels_dict = {
+            "1": "A",
+            "2": "B",
+            "3": "C",
+            "4": "D",
+            "5": "E",
+            "6": "F",
+            "7": "G",
+            "8": "H",
+            "9": "I",
+            "10": "J"
+        }
         self.composed_matrices = []
         
         # Generate base matrices
@@ -49,7 +62,14 @@ class Torus:
                     if (pos * 2) - 1 == y:
                         rotation[x - 1][y - 1] = 1
                         rotation[x][y] = 1
+            # Create label for rotation
+            if k == self.n:
+                self.base_labels.insert(0, "Identity")
+            else:
+                self.base_labels.append("r0-z"+str(360//self.n * k))
+            # Append rotation
             self.base_matrices["stick_rotations"].append(rotation)
+        # Count them up and move the identity to the front
         self.total += len(self.base_matrices["stick_rotations"])
         self.base_matrices["stick_rotations"].insert(0, self.base_matrices["stick_rotations"].pop())
 
@@ -73,6 +93,8 @@ class Torus:
                 pos = pos * 2 - 1
                 reflection[j][pos] = -1
                 reflection[j - 1][pos - 1] = -1
+            # Create labels for each reflection
+            self.base_labels.append("r0-"+self.labels_dict[str(i)])
             self.base_matrices["stick_reflections"].append(reflection)
         self.total += len(self.base_matrices["stick_reflections"])
 
@@ -80,6 +102,7 @@ class Torus:
         """Generate matrices for r_0-A_i and r_0-A_i/A_i+1 when n is even."""
         div = False
         i = 1
+        x = 1
         while i <= self.n // 2:
             # reset matrix to 0's for each iteration
             reflection = np.array(copy.deepcopy([[0 for _ in range(self.n * 2)] for _ in range (self.n * 2)]))
@@ -93,6 +116,8 @@ class Torus:
                     reflection[j][pos] = -1
                     reflection[j - 1][pos - 1] = -1
                 div = True
+                # Create labels for each reflection
+                self.base_labels.append("r0-"+self.labels_dict[str(x)])
                 self.base_matrices["stick_reflections"].append(reflection)
             else:
                 for j, k in zip(range(1, self.n * 2 + 1, 2), range(1, self.n + 1)):
@@ -104,7 +129,9 @@ class Torus:
                     reflection[j - 1][pos - 1] = -1
                 div = False
                 i += 1
+                self.base_labels.append("r0-"+self.labels_dict[str(x)])
                 self.base_matrices["stick_reflections"].append(reflection)
+            x += 1
         self.total += len(self.base_matrices["stick_reflections"])
 
     def _re_all(self):
@@ -115,6 +142,8 @@ class Torus:
                 re_all[i][i] = 1
             else:
                 re_all[i][i] = -1 
+        # Create a label
+        self.base_labels.append("re-all")
         self.base_matrices["re_all"].append(re_all)
         self.total += 1
 
@@ -129,6 +158,8 @@ class Torus:
                 else:
                     reflection[j][j] = 1 
                     reflection[j - 1][j - 1] = 1 
+            # Create labels
+            self.base_labels.append("r1-"+self.labels_dict[str(i)])
             self.base_matrices["stickless_reflections"].append(reflection)
         self.total += len(self.base_matrices["stickless_reflections"])
 
@@ -145,8 +176,9 @@ class Torus:
             for combo in combos:
                 for j in range(self.n * 2):
                     result = self.composed_matrices[j]
-                    for matrix in combo:
-                        result = np.matmul(result, matrix)
+                    # Iterate in reverse over the combo
+                    for k in range(len(combo) - 1, -1, -1):
+                        result = np.matmul(combo[k], result)
                     self.composed_matrices.append(result)
         # Second half
         for i in range(self.n * 2):
@@ -158,9 +190,11 @@ class Torus:
             for combo in combos:
                 for j in range(self.n * 2):
                     # only difference is we stack re-z on all the combos from the first half
-                    result = np.matmul(self.composed_matrices[j], self.base_matrices["re_all"][0])
-                    for matrix in combo:
-                        result = np.matmul(result, matrix)
+                    result = self.composed_matrices[j]
+                    # Iterate in reverse over the combo
+                    for k in range(len(combo) - 1, -1, -1):
+                        result = np.matmul(combo[k], result)
+                    result = np.matmul(self.base_matrices["re_all"][0], result)
                     self.composed_matrices.append(result)
 
     def _cayley(self):
@@ -170,7 +204,7 @@ class Torus:
                 result = np.matmul(self.composed_matrices[x], self.composed_matrices[y])
                 for i in range(len(self.composed_matrices)):
                     if np.array_equal(result, self.composed_matrices[i]):
-                        self.cayley_table[x][y] = i + 1
+                        self.cayley_table[x][y] = i + 1 
                         break
                 
 
@@ -198,7 +232,7 @@ class Torus:
         with open(file, 'w') as outfile:
             json.dump(response, outfile)
 
-torus = Torus(2)
+torus = Torus(6)
 torus.print_cayley()
 
 
