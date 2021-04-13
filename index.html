@@ -54,8 +54,8 @@
 
               function buildPage(data){
                 // Make meta info card
-                metaCardDiv.remove();
                 var metaContainer = document.getElementById("meta");
+                metaContainer.innerHTML = "";
                 var metaCardDiv = document.createElement("div");
                 metaCardDiv.classList.add("metaCardDiv");
 
