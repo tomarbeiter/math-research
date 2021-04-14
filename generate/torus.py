@@ -250,18 +250,22 @@ class Torus:
             "n": self.n,
             "total_base": self.total,
             "total_composed": self.total_c,
+            "composed_labels": self.composed_labels,
             "composed": self.composed_matrices,
             "cayley": self.cayley_table
         }
         with open(file, 'w') as outfile:
             json.dump(response, outfile)
+""" 
+torus = Torus(2)
+torus.print_to_file("data/t2.json")
 
 torus = Torus(3)
 torus.print_to_file("data/t3.json")
 
-
 torus3 = Torus(4)
 torus3.print_to_file("data/t4.json")
+ """
 
 torus4 = Torus(5)
 torus4.print_to_file("data/t5.json")

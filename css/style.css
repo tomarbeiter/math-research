@@ -83,3 +83,67 @@ h1 {
     width: 60em;
   }
   
+.toolCard {
+    height: 35em;
+    width: 60em;
+    margin: 0 auto;
+}
+
+.cont {
+    padding-top: 3em;
+    padding-bottom: 10em;
+    height: 30em;
+    width: 60em;
+    margin: 0 auto;
+}
+
+.footer {
+    height: 10em;
+}
+
+.inputRow {
+    padding-top: .3em;
+}
+
+.leftidx {
+    text-align: center;
+    padding-top: 1.5em;
+    font-size: large;
+    font-weight: bold;
+}
+
+.labelCol {
+    padding-top: 1.5em;
+    font-size: large;
+    font-weight: bold;
+}
+
+.matrix-table {
+    height: 13em; 
+    overflow-x: scroll; 
+    overflow-y: scroll;
+    width: 13em;
+    padding-top: 1em;
+  }
+
+.matrixRow {
+    padding-top: 1.5em;
+    height: 13em;
+}
+
+.x {
+    font-size: x-large;
+    font-weight: bold;
+
+}
+
+.matrixRow {
+    align-items: center;
+}
+
+.cardHelp {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    text-align: center;
+    padding-top: 1em;
+    padding-bottom: 1em;
+}
