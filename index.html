@@ -135,22 +135,22 @@
                         "<input id='rightop' class='form-control shadow' aria-label='Choose n'>" +
                     "</div>" + 
                     "<div class='col-12 btninput'>" +
-                      "<button id='submitTool' type='submit' class='btn btn-primary button' onclick='buildTool()''>Submit</button>" +
+                      "<button id='submitTool' type='submit' class='btn btn-primary button' onclick='buildTool(data)''>Submit</button>" +
                     "</div>"
               
                 var cardTitle = document.createElement("div")
                 cardTitle.classList.add("cardTitle");
                 cardTitle.innerHTML = "Cayley Table Anaylsis Tool";
                 var cardHelp = document.createElement("div");
-                cardTitle.classList.add("cardHelp");
-                cardTitle.innerHTML = "Operands are (left) x (top). We compute the composition as top then left, but write it as (left) x (top).";
+                cardHelp.classList.add("cardHelp");
+                cardHelp.innerHTML = "Operands are (left) x (top). We compute the composition as top then left, but write it as (left) x (top).";
                 toolCardDiv.appendChild(cardTitle);
+                toolCardDiv.appendChild(cardHelp);
                 toolCardDiv.appendChild(inp)
-                
               }
             };
 
-            function buildTool(){
+            function buildTool(data){
               var toolCardDiv = document.getElementById("toolCardDiv");
               var content = document.getElementById("content");
               content.innerHTML = "";
