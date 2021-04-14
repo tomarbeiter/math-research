@@ -52,12 +52,13 @@ h1 {
     width: 60em;
     height: 30em;
     margin: 0 auto;
+    border-radius: .5em;
 }
 .metaCard {
     width: 15em;
     height: 7em;
     margin: 0 auto;
-    border-radius: .75em;
+    border-radius: .5em;
     text-align: center;
     padding-top: 1em;
 }
@@ -88,6 +89,7 @@ h1 {
     width: 60em;
     margin: 0 auto;
     padding-bottom: 5em;
+    border-radius: .5em;
 }
 
 .cont {
@@ -147,5 +149,5 @@ h1 {
 }
 
 .extra {
-    height: 10em;
+    padding-bottom: 10em;
 }
