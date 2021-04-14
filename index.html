@@ -39,8 +39,6 @@
           </div>
         </div>
       <div id="meta" class="extra"></div>
-      <div id="content"></div>
-      <div id="extra" class="extra"></div>
       <script>
             function submit() {
               fetch('/data/t' + $('#n').val() + '.json')
@@ -165,8 +163,13 @@
               function buildTool(data){
               
                 var toolCardDiv = document.getElementById("toolCardDiv");
-                var content = document.getElementById("content");
-                content.innerHTML = "";
+                if (toolCardDiv.contains(document.getElementById("content"))) {
+                  document.getElementById("content").innerHTML = "";
+                }
+                else {
+                  var content = document.createElement("div");
+                  content.id = "content";
+                }
                 var leftop = document.getElementById("leftop").value;
                 var rightop = document.getElementById("rightop").value;
                 var leftlabel = data["composed_labels"][leftop - 1];
@@ -267,9 +270,6 @@
                     matrixRow.appendChild(equalCont);
                     content.appendChild(matrixRow);
                     toolCardDiv.appendChild(content);
-                    var extra = document.createElement("div");
-                    extra.classList.add("extra");
-                    toolCardDiv.appendChild("extra");
               }    
             }
       </script>
