@@ -135,7 +135,7 @@
                         "<input id='rightop' class='form-control shadow' aria-label='Choose n'>" +
                     "</div>" + 
                     "<div class='col-12 btninput'>" +
-                      "<button id='submitTool' type='submit' class='btn btn-primary button' onclick='buildTool(data)''>Submit</button>" +
+                      "<button id='submitTool' type='submit' class='btn btn-primary button' onclick='toolSubmit()''>Submit</button>" +
                     "</div>"
               
                 var cardTitle = document.createElement("div")
@@ -150,111 +150,129 @@
               }
             };
 
-            function buildTool(data){
-              var toolCardDiv = document.getElementById("toolCardDiv");
-              var content = document.getElementById("content");
-              content.innerHTML = "";
-              var leftop = document.getElementById("leftop").value;
-              var rightop = document.getElementById("rightop").value;
-              var leftlabel = data["composed_labels"][leftop - 1];
-              var rightlabel = data["composed_labels"][rightop - 1];
+            function toolSubmit(){
+              fetch('/data/t' + $('#n').val() + '.json')
+                .then(function (response) {
+                  return response.json();
+                })
+                .then(function(data) {
+                  buildTool(data);
+                })
+                .catch(function (err) {
+                  console.log(err);
+                }); 
 
+              function buildTool(data){
               
-              content.innerHTML = "<div class='col'>" + 
-                  "<div class='row'>" + 
-                    "<div class='leftidx'>" +
-                      leftop + "&nbsp;&nbsp;&nbsp;x&nbsp;&nbsp;&nbsp;" + rightop + 
-                      "&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;&nbsp;" + 
-                      data["cayley"][leftop - 1][rightop - 1] +
+                var toolCardDiv = document.getElementById("toolCardDiv");
+                var content = document.getElementById("content");
+                content.innerHTML = "";
+                var leftop = document.getElementById("leftop").value;
+                var rightop = document.getElementById("rightop").value;
+                var leftlabel = data["composed_labels"][leftop - 1];
+                var rightlabel = data["composed_labels"][rightop - 1];
+
+                
+                content.innerHTML = "<div class='col'>" + 
+                    "<div class='row'>" + 
+                      "<div class='leftidx'>" +
+                        leftop + "&nbsp;&nbsp;&nbsp;x&nbsp;&nbsp;&nbsp;" + rightop + 
+                        "&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;&nbsp;" + 
+                        data["cayley"][leftop - 1][rightop - 1] +
+                      "</div>" +
+                      "<div class='d-flex justify-content-center labelCol'>" + 
+                        "<div>" +
+                          data["composed_labels"][leftop - 1] +
+                        "</div>" + 
+                        "<div>" +
+                          "&nbsp;&nbsp;&nbsp;x&nbsp;&nbsp;&nbsp;" + 
+                        "</div>" + 
+                        "<div>" +
+                          data["composed_labels"][rightop - 1] +
+                        "</div>" +
+                        "<div>" +
+                          "&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;&nbsp;" +
+                        "</div>" +
+                        "<div>" +
+                          data["composed_labels"][data["cayley"][leftop - 1][rightop - 1] - 1] +
+                        "</div>" +
+                      "</div>" + 
                     "</div>" +
-                    "<div class='d-flex justify-content-center labelCol'>" + 
-                      "<div>" +
-                        data["composed_labels"][leftop - 1] +
-                      "</div>" + 
-                      "<div>" +
-                        "&nbsp;&nbsp;&nbsp;x&nbsp;&nbsp;&nbsp;" + 
-                      "</div>" + 
-                      "<div>" +
-                        data["composed_labels"][rightop - 1] +
-                      "</div>" +
-                      "<div>" +
-                        "&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;&nbsp;" +
-                      "</div>" +
-                      "<div>" +
-                        data["composed_labels"][data["cayley"][leftop - 1][rightop - 1] - 1] +
-                      "</div>" +
-                    "</div>" + 
-                  "</div>" +
-                "</div>"
-
-
-              var matrixRow = document.createElement("div");
-              matrixRow.classList.add("d-flex");
-              matrixRow.classList.add("justify-content-center");
-              matrixRow.classList.add("matrixRow");
-              matrixRow.classList.add("matrixRow");
-
-              // Make left Matrix
-              var leftCont = document.createElement("div");
-              leftCont.classList.add("matrix-table");
-              var leftmatrix = document.createElement("table");
-              leftmatrix.classList.add("table");
-              leftmatrix.classList.add("table-bordered");
-              for (var i = 0; i < data["n"] * 2; i++){
-                  tr = leftmatrix.insertRow(-1);
-                  for (var j = 0; j < data["n"] * 2; j++){
-                    var tabCell = tr.insertCell(-1);
-                    tabCell.style.textAlign = 'center';
-                    tabCell.innerHTML = data["composed"][leftop - 1][i][j];
-                  }
-                }
-                leftCont.appendChild(leftmatrix);
-                matrixRow.appendChild(leftCont);
-
-                var mult = document.createElement("div")
-                mult.innerHTML = "<div class='x'> &nbsp;&nbsp;&nbsp;x&nbsp;&nbsp;&nbsp;" +
                   "</div>"
-                matrixRow.appendChild(mult);
 
-                // Make right matrix
-                var rightCont = document.createElement("div");
-                rightCont.classList.add("matrix-table");
-                var rightmatrix = document.createElement("table");
-                rightmatrix.classList.add("table");
-                rightmatrix.classList.add("table-bordered");
+
+                var matrixRow = document.createElement("div");
+                matrixRow.classList.add("d-flex");
+                matrixRow.classList.add("justify-content-center");
+                matrixRow.classList.add("matrixRow");
+                matrixRow.classList.add("matrixRow");
+
+                // Make left Matrix
+                var leftCont = document.createElement("div");
+                leftCont.classList.add("matrix-table");
+                var leftmatrix = document.createElement("table");
+                leftmatrix.classList.add("table");
+                leftmatrix.classList.add("table-bordered");
                 for (var i = 0; i < data["n"] * 2; i++){
-                  tr = rightmatrix.insertRow(-1);
-                  for (var j = 0; j < data["n"] * 2; j++){
-                    var tabCell = tr.insertCell(-1);
-                    tabCell.style.textAlign = 'center';
-                    tabCell.innerHTML = data["composed"][rightop - 1][i][j];
-                  }
-                }
-                  rightCont.appendChild(rightmatrix);
-                  matrixRow.appendChild(rightCont);
-                  var equal = document.createElement("div")
-                  matrixRow.appendChild(equal);
-                  equal.innerHTML = "<div class='x'> &nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;&nbsp;</div>" 
-
-                  // Make equal matrix
-                  var equalCont = document.createElement("div");
-                  equalCont.classList.add("matrix-table");
-                  var equalmatrix = document.createElement("table");
-                  equalmatrix.classList.add("table");
-                  equalmatrix.classList.add("table-bordered");
-                  for (var i = 0; i < data["n"] * 2; i++){
-                    tr = equalmatrix.insertRow(-1);
+                    tr = leftmatrix.insertRow(-1);
                     for (var j = 0; j < data["n"] * 2; j++){
                       var tabCell = tr.insertCell(-1);
                       tabCell.style.textAlign = 'center';
-                      tabCell.innerHTML = data["composed"][data["cayley"][leftop - 1][rightop - 1] - 1][i][j];
+                      tabCell.innerHTML = data["composed"][leftop - 1][i][j];
                     }
                   }
-                  equalCont.appendChild(equalmatrix);
-                  matrixRow.appendChild(equalCont);
-                  content.appendChild(matrixRow);
-                  toolCardDiv.appendChild(content);
+                  leftCont.appendChild(leftmatrix);
+                  matrixRow.appendChild(leftCont);
+
+                  var mult = document.createElement("div")
+                  mult.innerHTML = "<div class='x'> &nbsp;&nbsp;&nbsp;x&nbsp;&nbsp;&nbsp;" +
+                    "</div>"
+                  matrixRow.appendChild(mult);
+
+                  // Make right matrix
+                  var rightCont = document.createElement("div");
+                  rightCont.classList.add("matrix-table");
+                  var rightmatrix = document.createElement("table");
+                  rightmatrix.classList.add("table");
+                  rightmatrix.classList.add("table-bordered");
+                  for (var i = 0; i < data["n"] * 2; i++){
+                    tr = rightmatrix.insertRow(-1);
+                    for (var j = 0; j < data["n"] * 2; j++){
+                      var tabCell = tr.insertCell(-1);
+                      tabCell.style.textAlign = 'center';
+                      tabCell.innerHTML = data["composed"][rightop - 1][i][j];
+                    }
+                  }
+                    rightCont.appendChild(rightmatrix);
+                    matrixRow.appendChild(rightCont);
+                    var equal = document.createElement("div")
+                    matrixRow.appendChild(equal);
+                    equal.innerHTML = "<div class='x'> &nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;&nbsp;</div>" 
+
+                    // Make equal matrix
+                    var equalCont = document.createElement("div");
+                    equalCont.classList.add("matrix-table");
+                    var equalmatrix = document.createElement("table");
+                    equalmatrix.classList.add("table");
+                    equalmatrix.classList.add("table-bordered");
+                    for (var i = 0; i < data["n"] * 2; i++){
+                      tr = equalmatrix.insertRow(-1);
+                      for (var j = 0; j < data["n"] * 2; j++){
+                        var tabCell = tr.insertCell(-1);
+                        tabCell.style.textAlign = 'center';
+                        tabCell.innerHTML = data["composed"][data["cayley"][leftop - 1][rightop - 1] - 1][i][j];
+                      }
+                    }
+                    equalCont.appendChild(equalmatrix);
+                    matrixRow.appendChild(equalCont);
+                    content.appendChild(matrixRow);
+                    toolCardDiv.appendChild(content);
+              }    
+
+
             }
+
+            
       </script>
       
 
