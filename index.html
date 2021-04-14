@@ -148,9 +148,8 @@
                 toolCardDiv.appendChild(cardHelp);
                 toolCardDiv.appendChild(inp)
               }
-            };
 
-            function toolSubmit(){
+              function toolSubmit(){
               fetch('/data/t' + $('#n').val() + '.json')
                 .then(function (response) {
                   return response.json();
@@ -267,10 +266,11 @@
                     matrixRow.appendChild(equalCont);
                     content.appendChild(matrixRow);
                     toolCardDiv.appendChild(content);
-              }    
+                }    
+              }
+            };
 
-
-            }
+            
 
             
       </script>
