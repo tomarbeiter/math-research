@@ -39,6 +39,7 @@
           </div>
         </div>
       <div id="meta" class="extra"></div>
+      <div id="extra" class="extra"></div>
       <script>
             function submit() {
               fetch('/data/t' + $('#n').val() + '.json')
@@ -163,8 +164,9 @@
               function buildTool(data){
               
                 var toolCardDiv = document.getElementById("toolCardDiv");
-                if (toolCardDiv.contains(document.getElementById("content"))) {
-                  document.getElementById("content").innerHTML = "";
+                content = document.getElementById("content");
+                if (toolCardDiv.contains(content)) {
+                  content.innerHTML = "";
                 }
                 else {
                   var content = document.createElement("div");
