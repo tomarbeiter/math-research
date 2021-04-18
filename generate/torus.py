@@ -1,10 +1,10 @@
 """Class to handle generating the matrices for T^n"""
+
 import copy
 import numpy as np
 import itertools as it
-from pymongo import MongoClient
 import json
-
+import timeit
 
 class Torus:
     def __init__(self, n):
@@ -32,6 +32,7 @@ class Torus:
         }
         self.composed_matrices = []
         self.composed_labels = []
+        self.colors = []
         # Generate base matrices
         self._stick_rotations()
         self._stick_reflections()
@@ -44,7 +45,7 @@ class Torus:
         self.cayley_table = [[0 for _ in range(len(self.composed_matrices))] for _ in range(len(self.composed_matrices))]
         self.total_c = len(self.composed_matrices)
         self._cayley()
-
+        
         
 
     def _stick_rotations(self):
@@ -193,6 +194,9 @@ class Torus:
                         for z in range(len(self.base_matrices_list)):
                             if np.array_equal(combo[k], self.base_matrices_list[z]):
                                 label = self.base_labels[z] + "</br>" + label
+                    # Get determinant to determine shading
+                    det = np.linalg.det(result)
+                    self.colors.append("blue" if det == 1 else "orange")
                     self.composed_matrices.append(result)
                     self.composed_labels.append(label)
         # Second half
@@ -217,21 +221,24 @@ class Torus:
                                 label = self.base_labels[z] + "</br>" + label
                     result = np.matmul(self.base_matrices["re_all"][0], result)
                     label = self.base_labels[self.n * 2] + "</br>" + label
+                    # Get determinant to determine shading
+                    det = np.linalg.det(result)
+                    self.colors.append("blue" if det == 1 else "orange")
                     self.composed_matrices.append(result)
                     self.composed_labels.append(label)
 
-
     def _cayley(self):
         """Generate Cayley Table using indices of matrices."""
+        strings = [str(i) for i in self.composed_matrices]
+        result = np.array(copy.deepcopy([[0 for _ in range(self.n * 2)] for _ in range (self.n * 2)]))
         for x in range(len(self.composed_matrices)):
             for y in range(len(self.composed_matrices)):
-                result = np.matmul(self.composed_matrices[x], self.composed_matrices[y])
-                for i in range(len(self.composed_matrices)):
-                    if np.array_equal(result, self.composed_matrices[i]):
-                        self.cayley_table[x][y] = i + 1 
-                        break
+                np.matmul(self.composed_matrices[x], self.composed_matrices[y], result)
+                #for i in range(len(self.composed_matrices)):
+                    #if np.array_equal(result, self.composed_matrices[i]):
+                self.cayley_table[x][y] = strings.index(str(result)) + 1
+                # break
                 
-
     def print_matrix(self, key):
         for i in range(len(self.base_matrices[key])):
             for j in range(self.n * 2):
@@ -252,6 +259,7 @@ class Torus:
             "total_composed": self.total_c,
             "composed_labels": self.composed_labels,
             "composed": self.composed_matrices,
+            "colors": self.colors,
             "cayley": self.cayley_table
         }
         with open(file, 'w') as outfile:
@@ -267,5 +275,5 @@ torus3 = Torus(4)
 torus3.print_to_file("data/t4.json")
  """
 
-torus4 = Torus(5)
-torus4.print_to_file("data/t5.json")
+torus4 = Torus(3)
+torus4.print_to_file("data/t3.json")

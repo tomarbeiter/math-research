@@ -108,6 +108,7 @@
                     var tabCell = tr.insertCell(-1);
                     tabCell.style.textAlign = 'center';
                     tabCell.innerHTML = data["cayley"][i][j];
+                    tabCell.classList.add(data["colors"][data["cayley"][i][j] - 1])
                   }
                 }
                 cardBody.appendChild(table);

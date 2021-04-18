@@ -151,3 +151,11 @@ h1 {
 .extra {
     padding-bottom: 10em;
 }
+
+.blue {
+    background-color: cadetblue;
+}
+
+.orange {
+    background-color: tan;
+}
