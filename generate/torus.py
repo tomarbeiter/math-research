@@ -207,6 +207,9 @@ class Torus:
         for i in range(self.n * 2):
             self.composed_matrices.append(np.matmul(self.composed_matrices[i], self.base_matrices["re_all"][0]))
             self.composed_labels.append("re-all</br>" + self.base_labels[i])
+            # Get determinant to determine shading
+            det = np.linalg.det(result)
+            self.colors.append("cadetblue" if det == 1 else "tan")
         for i in range(1, self.n + 1):
             # Get all r1 combos
             combos = list(it.combinations(self.base_matrices["stickless_reflections"], i))
