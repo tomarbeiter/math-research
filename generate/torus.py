@@ -173,10 +173,14 @@ class Torus:
         for matrix in self.base_matrices["stick_rotations"]:
             self.composed_matrices.append(matrix)
             self.composed_labels.append(self.base_labels[idx])
+            det = np.linalg.det(matrix)
+            self.colors.append("cadetblue" if det == 1 else "tan")
             idx += 1
         for matrix in self.base_matrices["stick_reflections"]:
             self.composed_matrices.append(matrix)
             self.composed_labels.append(self.base_labels[idx])
+            det = np.linalg.det(matrix)
+            self.colors.append("cadetblue" if det == 1 else "tan")
             idx += 1
         # First half
         for i in range(1, self.n + 1):
@@ -196,7 +200,7 @@ class Torus:
                                 label = self.base_labels[z] + "</br>" + label
                     # Get determinant to determine shading
                     det = np.linalg.det(result)
-                    self.colors.append("blue" if det == 1 else "orange")
+                    self.colors.append("cadetblue" if det == 1 else "tan")
                     self.composed_matrices.append(result)
                     self.composed_labels.append(label)
         # Second half
@@ -223,7 +227,7 @@ class Torus:
                     label = self.base_labels[self.n * 2] + "</br>" + label
                     # Get determinant to determine shading
                     det = np.linalg.det(result)
-                    self.colors.append("blue" if det == 1 else "orange")
+                    self.colors.append("cadetblue" if det == 1 else "tan")
                     self.composed_matrices.append(result)
                     self.composed_labels.append(label)
 
