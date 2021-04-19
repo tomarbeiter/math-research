@@ -21,9 +21,9 @@
           <div class="row">
               <div class="col-md-6 mb-3">
                 <select id="shape" class="form-select shadow" aria-label="Choose Form">
-                    <option value="1">Torus</option>
-                    <option value="2">Klein Bottle</option>
-                    <option value="3">Projective Plane</option>
+                    <option value="t">Torus</option>
+                    <option value="k">Klein Bottle</option>
+                    <option value="p">Projective Plane</option>
                 </select>
               </div>
             <div class="col-md-6 mb-3">
@@ -42,7 +42,7 @@
       <div id="extra" class="extra"></div>
       <script>
             function submit() {
-              fetch('/data/t' + $('#n').val() + '.json')
+              fetch('/data/'+ $('#shape').val() + $('#n').val() + '.json')
                 .then(function (response) {
                   return response.json();
                 })

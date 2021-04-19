@@ -1,4 +1,4 @@
-"""Class to handle generating the matrices for T^n"""
+"""Class to handle generating the matrices for K^n"""
 
 import copy
 import numpy as np
@@ -6,7 +6,7 @@ import itertools as it
 import json
 import timeit
 
-class Torus:
+class Klein:
     def __init__(self, n):
         self.n = n
         self.total = 0
@@ -95,7 +95,7 @@ class Torus:
                 pos = (2 * i - k) % self.n
                 # convert position to 2n x 2n
                 pos = pos * 2 - 1
-                reflection[j][pos] = -1
+                reflection[j][pos] = 1
                 reflection[j - 1][pos - 1] = -1
             # Create labels for each reflection
             self.base_labels.append("r0-"+self.labels_dict[str(i)])
@@ -117,7 +117,7 @@ class Torus:
                     pos = (2 * i - k) % self.n
                     # convert position to 2n x 2n
                     pos = pos * 2 - 1
-                    reflection[j][pos] = -1
+                    reflection[j][pos] = 1
                     reflection[j - 1][pos - 1] = -1
                 div = True
                 # Create labels for each reflection
@@ -142,10 +142,7 @@ class Torus:
         """Generate matrix for re-all alternating 1 and -1 on diagonal."""
         re_all = np.array(copy.deepcopy([[0 for _ in range(self.n * 2)] for _ in range (self.n * 2)]))
         for i in range(0, self.n * 2):
-            if not i % 2:
-                re_all[i][i] = 1
-            else:
-                re_all[i][i] = -1 
+            re_all[i][i] = -1 
         # Create a label
         self.base_labels.append("re-all")
         self.base_matrices["re_all"].append(re_all)
@@ -157,7 +154,7 @@ class Torus:
             reflection = np.array(copy.deepcopy([[0 for _ in range(self.n * 2)] for _ in range (self.n * 2)]))
             for j, k in zip(range(1, self.n * 2 + 1, 2), range(1, self.n + 1)):
                 if k == i:
-                    reflection[j][j] = -1
+                    reflection[j][j] = 1
                     reflection[j - 1][j - 1] = -1
                 else:
                     reflection[j][j] = 1 
@@ -272,19 +269,12 @@ class Torus:
         }
         with open(file, 'w') as outfile:
             json.dump(response, outfile)
-""" 
-torus = Torus(2)
-torus.print_to_file("data/t2.json")
 
-torus = Torus(3)
-torus.print_to_file("data/t3.json")
+# klein3 = Klein(3)
+# klein3.print_to_file("data/k3.json")
 
-torus3 = Torus(4)
-torus3.print_to_file("data/t4.json")
- """
+#klein4 = Klein(4)
+#klein4.print_to_file("data/k4.json")
 
-torus4 = Torus(4)
-torus4.print_to_file("data/t4.json")
-
-torus5 = Torus(5)
-torus5.print_to_file("data/t5.json")
+klein5 = Klein(5)
+klein5.print_to_file("data/k5.json")

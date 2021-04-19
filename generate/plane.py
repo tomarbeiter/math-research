@@ -6,7 +6,7 @@ import itertools as it
 import json
 import timeit
 
-class Torus:
+class Projective:
     def __init__(self, n):
         self.n = n
         self.total = 0
@@ -95,8 +95,8 @@ class Torus:
                 pos = (2 * i - k) % self.n
                 # convert position to 2n x 2n
                 pos = pos * 2 - 1
-                reflection[j][pos] = -1
-                reflection[j - 1][pos - 1] = -1
+                reflection[j][pos] = 1
+                reflection[j - 1][pos - 1] = 1
             # Create labels for each reflection
             self.base_labels.append("r0-"+self.labels_dict[str(i)])
             self.base_matrices["stick_reflections"].append(reflection)
@@ -117,8 +117,8 @@ class Torus:
                     pos = (2 * i - k) % self.n
                     # convert position to 2n x 2n
                     pos = pos * 2 - 1
-                    reflection[j][pos] = -1
-                    reflection[j - 1][pos - 1] = -1
+                    reflection[j][pos] = 1
+                    reflection[j - 1][pos - 1] = 1
                 div = True
                 # Create labels for each reflection
                 self.base_labels.append("r0-"+self.labels_dict[str(x)])
@@ -129,8 +129,8 @@ class Torus:
                     pos = (2 * i + 1 - k) % self.n
                     # convert position to 2n x 2n
                     pos = pos * 2 - 1                   
-                    reflection[j][pos] = -1
-                    reflection[j - 1][pos - 1] = -1
+                    reflection[j][pos] = 1
+                    reflection[j - 1][pos - 1] = 1
                 div = False
                 i += 1
                 self.base_labels.append("r0-"+self.labels_dict[str(x)])
@@ -142,10 +142,7 @@ class Torus:
         """Generate matrix for re-all alternating 1 and -1 on diagonal."""
         re_all = np.array(copy.deepcopy([[0 for _ in range(self.n * 2)] for _ in range (self.n * 2)]))
         for i in range(0, self.n * 2):
-            if not i % 2:
-                re_all[i][i] = 1
-            else:
-                re_all[i][i] = -1 
+            re_all[i][i] = -1 
         # Create a label
         self.base_labels.append("re-all")
         self.base_matrices["re_all"].append(re_all)
@@ -157,8 +154,8 @@ class Torus:
             reflection = np.array(copy.deepcopy([[0 for _ in range(self.n * 2)] for _ in range (self.n * 2)]))
             for j, k in zip(range(1, self.n * 2 + 1, 2), range(1, self.n + 1)):
                 if k == i:
-                    reflection[j][j] = -1
-                    reflection[j - 1][j - 1] = -1
+                    reflection[j][j] = 1
+                    reflection[j - 1][j - 1] = 1
                 else:
                     reflection[j][j] = 1 
                     reflection[j - 1][j - 1] = 1 
@@ -272,19 +269,10 @@ class Torus:
         }
         with open(file, 'w') as outfile:
             json.dump(response, outfile)
-""" 
-torus = Torus(2)
-torus.print_to_file("data/t2.json")
 
-torus = Torus(3)
-torus.print_to_file("data/t3.json")
-
-torus3 = Torus(4)
-torus3.print_to_file("data/t4.json")
- """
-
-torus4 = Torus(4)
-torus4.print_to_file("data/t4.json")
-
-torus5 = Torus(5)
-torus5.print_to_file("data/t5.json")
+plane3 = Projective(3)
+plane3.print_to_file("data/p3.json")
+plane4 = Projective(4)
+plane4.print_to_file("data/p4.json")
+plane5 = Projective(5)
+plane5.print_to_file("data/p5.json")
